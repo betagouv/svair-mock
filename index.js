@@ -1,53 +1,19 @@
+const cluster = require('cluster'),
+      os = require('os'),
+      server = require('./server')
 
-const express = require('express');
-const morgan = require('morgan')
-const app = express();
-const exphbs = require('express-handlebars');
-const bodyParser = require('body-parser');
-const path = require('path')
-const Import = require('./data')
-const http = require('http')
-const throng = require('throng')
+const numCPUs = os.cpus().length
 
-app.engine('.hbs', exphbs({defaultLayout: 'single', extname: '.hbs'}));
-app.set('view engine', '.hbs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(morgan('combined'))
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+if (cluster.isMaster) {
+  console.log('[Master]', 'running')
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
-
-app.post('/secavis/faces/commun/index.jsf', function (req, res) {
-  const numFiscal = req.body["j_id_7:spi"]
-  const referenceAvis = req.body["j_id_7:num_facture"]
-  const id = numFiscal + "+" + referenceAvis
-  const defaultData = {
-    anneeImpots: '2015',
-    anneeRevenus: '2014'
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork()
   }
-  let dataImport = new Import(__dirname + '/data');
-  return dataImport.data().then((data) => {
-    let result = data[id]
-      if(result) {
-        result.layout = false;
-        res.render('svair', Object.assign(defaultData, result));
-      } else {
-        res.render('missing', { layout: false });
-      }
-    })
-});
 
-app.use('/secavis', express.static(path.join(__dirname, 'public')));
-
-
-const PORT = process.env.PORT || 3000
-let server
-
-throng({workers: 4}, function () {
-  server = http.createServer(app)
-  server.listen(PORT, function (err) {
-    console.log('SVAIR app listening on port %s!', PORT);
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`[Worker:${worker.process.pid}]`, 'died')
   })
-})
+} else {
+  server.start()
+}

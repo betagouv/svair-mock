@@ -1,25 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
-
-<title>Impots.gouv.fr - Service de vérification en ligne des avis</title>
-<link href="Impots.gouv.fr%20-%20Service%20de%20v%C3%A9rification%20en%20ligne%20des%20avis_files/style.css" rel="styleSheet" type="text/css">
-</head>
-
-<body>
-
-<div id="conteneur">
-<div id="barre_haut">
-			<div style="float: left;"><img src="Impots.gouv.fr%20-%20Service%20de%20v%C3%A9rification%20en%20ligne%20des%20avis_files/bo_seule-2.gif" alt=""></div>
-			<div style="float: right;"><img src="Impots.gouv.fr%20-%20Service%20de%20v%C3%A9rification%20en%20ligne%20des%20avis_files/bo_seule-3.gif" alt=""></div>
-</div>
-<div id="principal">
-<div id="nav_pro">
-<b>L'administration fiscale certifie l'authenticité du document présenté pour les données suivantes :</b>
-</div>
-
 <div class="titre_affiche_avis">
-  <span>Impôt  {{ anneeImpots }} sur les revenus de l'année  {{ anneeRevenus }}
+<span>Impôt   {{ anneeImpots }} sur les revenus de l'année  {{ anneeRevenus }}
 </span>
 </div>
 
@@ -68,7 +48,7 @@
 				</tr>
 				<tr>
 					<td class="labelPair">
-            Adresse déclarée au 1<sup>er</sup> janvier  {{ anneeImpots }}
+						Adresse déclarée au 1<sup>er</sup> janvier  {{ anneeImpots }}
 					</td>
 					<td class="labelPair">{{{ adress.ligne1 }}}
 					</td>
@@ -150,17 +130,12 @@
 			<div id="situationPartielle">{{{ situationPartielle }}}
 			</div>
 
-{{#if erreurCorrectif}}
-            <div id="erreurCorrectif">{{{ erreurCorrectif }}}</div>
+			{{#if erreurCorrectif}}
+			<div id="erreurCorrectif">{{{ erreurCorrectif }}}</div>
+			{{/if}}
 
-{{/if}}
 			<div id="boutonsAvis">
 				<a class="nouvelle_recherche" href="/secavis/">
 					Nouvelle recherche
 				</a>
 			 </div>
-
-		</div>
-	</div>
-
-</body></html>
